@@ -1,4 +1,4 @@
-var app = require('./server');
+var app = require('../server/server');
 var request = require('supertest');
 var expect = require('chai').expect;
 
