@@ -17,6 +17,8 @@ app.use(bodyParser.json());
 // '/lion' we want to use this router
 app.use('/lions', lionRouter);
 
+app.use('/tigers', tigerRouter);
+
 app.use(function(err, req, res, next) {
   if (err) {
     res.status(500).send(error);
