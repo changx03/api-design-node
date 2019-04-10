@@ -6,7 +6,7 @@ var config = {
   dev: 'development',
   test: 'testing',
   prod: 'production',
-  port: process.env.PORT || 3000
+  port: process.env.PORT || 3001
 };
 
 // check to see if the NODE_ENV was set, if not, the set it to dev
@@ -21,6 +21,14 @@ config.env = process.env.NODE_ENV;
 // conditionally load in another config file depending on what
 // env we are in. We then merge those objects with the env config overriting
 // the default config if here. We then export that new object for our app to use
-var envConfig;
+let envConfig
+try {
+  envConfig = require('./' + config.env)
+} catch(err) {
+  console.error(err)
+} finally {
+  envConfig = envConfig || {}
+  console.log(envConfig)
+}
 
 module.exports = _.merge(config, envConfig);

@@ -12,7 +12,8 @@ var app = require('./server/server');
 // so you don't have to erase all calls to it
 var logger = require('./server/util/logger');
 
-app.listen(config.port);
-logger.log('listening on http://localhost:' + config.port);
+app.listen(config.port, function() {
+  logger.log('listening on http://localhost:' + config.port);
+});
 
 
