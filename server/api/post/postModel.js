@@ -16,4 +16,8 @@ const PostSchema = new Schema({
   categories: [{ type: Schema.Types.ObjectId, ref: 'category' }]
 })
 
-module.exports = mongoose.model('post', PostSchema)
+const Post = mongoose.model('post', PostSchema)
+
+// Post.find().populate(['user', 'category']).then(posts => { console.log(posts)})
+
+module.exports = Post
