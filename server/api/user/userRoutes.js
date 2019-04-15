@@ -1,12 +1,7 @@
-var router = require('express').Router();
-var logger = require('../../util/logger');
+const router = require('express').Router();
+const controller = require('./userController')
+const createRoutes = require('../../util/createRoutes')
 
-// setup boilerplate route jsut to satisfy a request
-// for building
-router.param('id', function(){});
-
-router.route('/')
-
-router.route('/:id')
+createRoutes(controller, router)
 
 module.exports = router;
