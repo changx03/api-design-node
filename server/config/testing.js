@@ -2,6 +2,6 @@ module.exports = {
   // disbable logging for testing
   logging: false,
   db: {
-    url: 'mongodb://localhost/nodeblog-test'
+    url: 'mongodb://app:app-pass@localhost:27017/nodeblog-test?authSource=admin'
   }
 };
