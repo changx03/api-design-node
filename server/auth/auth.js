@@ -22,7 +22,7 @@ exports.decodeToken = function() {
   };
 };
 
-exports.getUserFromId = function() {
+exports.getUserById = function() {
   return function(req, res, next) {
     // we'll have access to req.user here
     // because we'll use decodeToken in before
