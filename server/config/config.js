@@ -6,7 +6,7 @@ var config = {
   prod: 'production',
   port: process.env.PORT || 3000,
   // 10 days in minutes
-  expireTime: 24 * 60 * 10,
+  expireTime: 10 * 26 * 60 * 60,
   secrets: {
     jwt: process.env.JWT || 'gumball'
   }
@@ -24,7 +24,7 @@ try {
   // just making sure the require actually
   // got something back :)
   envConfig = envConfig || {};
-} catch(e) {
+} catch (e) {
   envConfig = {};
 }
 
