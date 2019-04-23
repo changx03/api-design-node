@@ -36,7 +36,17 @@ exports.getFreshUser = function() {
 
     // update req.user with fresh user from the
     // stale token data
-
+    User
+      .findById(req.user._id)
+      .then(data => {
+        // _id not found
+        if (!data) {
+          res.sendStatus(401) // unauthorized
+          return 
+        }
+        res.user = data
+        next()
+      })
   }
 };
 
@@ -46,6 +56,10 @@ exports.verifyUser = function() {
     var password = req.body.password;
 
     // if no username or password then stop.
+    if (!(username && password)) {
+      res.sendStatus(401)
+      return
+    }
 
     // look user up in the DB so we can check
     // if the passwords match for the username
@@ -53,7 +67,6 @@ exports.verifyUser = function() {
     // use the authenticate() method on a user doc. Passin
     // in the posted password, it will hash the
     // password the same way as the current passwords got hashed
-
 
   };
 };
