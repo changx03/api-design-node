@@ -1,8 +1,9 @@
 var jwt = require('jsonwebtoken');
 var expressJwt = require('express-jwt');
 var config = require('../config/config');
-var checkToken = expressJwt({ secret: config.secrets.jwt });
 var User = require('../api/user/userModel');
+
+var parseJwtToken = expressJwt({ secret: config.secrets.jwt });
 
 exports.decodeToken = function() {
   return function(req, res, next) {
@@ -17,11 +18,11 @@ exports.decodeToken = function() {
     // this will call next if token is valid
     // and send error if its not. It will attached
     // the decoded token to req.user
-    checkToken(req, res, next);
+    parseJwtToken(req, res, next);
   };
 };
 
-exports.getFreshUser = function() {
+exports.getUserById = function() {
   return function(req, res, next) {
     // we'll have access to req.user here
     // because we'll use decodeToken in before
@@ -33,9 +34,9 @@ exports.getFreshUser = function() {
     // to a real user in our DB. Either the user was deleted
     // since the client got the JWT, or
     // it was a JWT from some other source
-
     // update req.user with fresh user from the
     // stale token data
+<<<<<<< HEAD
     User
       .findById(req.user._id)
       .then(data => {
@@ -48,34 +49,76 @@ exports.getFreshUser = function() {
         next()
       })
   }
+=======
+    User.findById(req.user._id).then(
+      user => {
+        if (!user) {
+          res.status(401).send('Unauthorized');
+          return;
+        }
+        req.user = user;
+        next();
+      },
+      err => {
+        next(err);
+      }
+    );
+  };
+>>>>>>> 0122903600d7b6ca1e1c19dea4869cb74217eccd
 };
 
 exports.verifyUser = function() {
   return function(req, res, next) {
     var username = req.body.username;
     var password = req.body.password;
-
     // if no username or password then stop.
+<<<<<<< HEAD
     if (!(username && password)) {
       res.sendStatus(401)
       return
+=======
+    if (!username || !password) {
+      res.status(400).send('Missing username or password');
+      return;
+>>>>>>> 0122903600d7b6ca1e1c19dea4869cb74217eccd
     }
 
     // look user up in the DB so we can check
     // if the passwords match for the username
+<<<<<<< HEAD
 
     // use the authenticate() method on a user doc. Passin
     // in the posted password, it will hash the
     // password the same way as the current passwords got hashed
 
+=======
+    User.findOne({ username }).then(
+      user => {
+        if (!user) {
+          res.status(401).send('Cannot find matching username');
+          return;
+        }
+        // use the authenticate() method on a user doc. Passing
+        // in the posted password, it will hash the
+        // password the same way as the current passwords got hashed
+        if (!user.authenticate(password)) {
+          res.status(401).send('Wrong password');
+          return;
+        }
+        req.user = user;
+        next();
+      },
+      err => {
+        next(err);
+      }
+    );
+>>>>>>> 0122903600d7b6ca1e1c19dea4869cb74217eccd
   };
 };
 
 // util method to sign tokens on signup
 exports.signToken = function(id) {
-  return jwt.sign(
-    {_id: id},
-    config.secrets.jwt,
-    {expiresInMinutes: config.expireTime}
-  );
+  return jwt.sign({ _id: id }, config.secrets.jwt, {
+    expiresIn: config.expireTime
+  });
 };
