@@ -3,6 +3,6 @@ module.exports = {
   logging: true,
   seed: true,
   db: {
-    url: 'mongodb://localhost/nodeblog'
+    url: 'mongodb://app:app-pass@localhost:27017/nodeblog?authSource=admin'
   }
 };

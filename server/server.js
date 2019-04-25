@@ -4,8 +4,12 @@ var api = require('./api/api');
 var config = require('./config/config');
 var logger = require('./util/logger');
 var auth = require('./auth/routes');
+const mongoose = require('mongoose');
+
 // db.url is different depending on NODE_ENV
-require('mongoose').connect(config.db.url);
+mongoose.Promise = global.Promise;
+mongoose.connect(config.db.url, { useMongoClient: true });
+console.log('connecting to ' + config.db.url);
 
 if (config.seed) {
   require('./util/seed');
