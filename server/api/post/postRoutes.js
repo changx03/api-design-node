@@ -1,6 +1,8 @@
 var router = require('express').Router();
-var logger = require('../../util/logger');
 var controller = require('./postController');
+const auth = require('../../auth/auth');
+
+const checkUser = [auth.decodeToken(), auth.getUserById()];
 
 router.param('id', controller.params);
 
@@ -9,12 +11,17 @@ router
   .get((req, res, next) => {
     next();
   }, controller.get)
-  .post(controller.post);
+  .post(checkUser, controller.post);
 
 router
   .route('/:id')
   .get(controller.getOne)
-  .put(controller.put)
-  .delete(controller.delete);
+  .put(checkUser, controller.put)
+  .delete(checkUser, controller.delete);
+
+/**
+ * TODO: What if user is deleted, what will happen to the posts from this user?
+ * Mongo won't update it
+ */
 
 module.exports = router;

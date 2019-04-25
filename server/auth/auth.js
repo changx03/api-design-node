@@ -36,20 +36,6 @@ exports.getUserById = function() {
     // it was a JWT from some other source
     // update req.user with fresh user from the
     // stale token data
-<<<<<<< HEAD
-    User
-      .findById(req.user._id)
-      .then(data => {
-        // _id not found
-        if (!data) {
-          res.sendStatus(401) // unauthorized
-          return 
-        }
-        res.user = data
-        next()
-      })
-  }
-=======
     User.findById(req.user._id).then(
       user => {
         if (!user) {
@@ -64,7 +50,6 @@ exports.getUserById = function() {
       }
     );
   };
->>>>>>> 0122903600d7b6ca1e1c19dea4869cb74217eccd
 };
 
 exports.verifyUser = function() {
@@ -72,26 +57,18 @@ exports.verifyUser = function() {
     var username = req.body.username;
     var password = req.body.password;
     // if no username or password then stop.
-<<<<<<< HEAD
-    if (!(username && password)) {
-      res.sendStatus(401)
-      return
-=======
     if (!username || !password) {
       res.status(400).send('Missing username or password');
       return;
->>>>>>> 0122903600d7b6ca1e1c19dea4869cb74217eccd
     }
 
     // look user up in the DB so we can check
     // if the passwords match for the username
-<<<<<<< HEAD
 
     // use the authenticate() method on a user doc. Passin
     // in the posted password, it will hash the
     // password the same way as the current passwords got hashed
 
-=======
     User.findOne({ username }).then(
       user => {
         if (!user) {
@@ -112,7 +89,6 @@ exports.verifyUser = function() {
         next(err);
       }
     );
->>>>>>> 0122903600d7b6ca1e1c19dea4869cb74217eccd
   };
 };
 

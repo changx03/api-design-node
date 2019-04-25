@@ -3,19 +3,23 @@ var _ = require('lodash');
 var signToken = require('../../auth/auth').signToken;
 
 exports.params = function(req, res, next, id) {
-  User.findById(id).then(
-    function(user) {
-      if (!user) {
-        next(new Error('No user with that id'));
-      } else {
-        req.user = user;
-        next();
+  User.findById(id)
+    // exclude field. We don't want to return hashed password in the document
+    .select('-password') 
+    .exec()
+    .then(
+      function(user) {
+        if (!user) {
+          next(new Error('No user with that id'));
+        } else {
+          req.user = user;
+          next();
+        }
+      },
+      function(err) {
+        next(err);
       }
-    },
-    function(err) {
-      next(err);
-    }
-  );
+    );
 };
 
 exports.get = function(req, res, next) {
@@ -72,4 +76,8 @@ exports.delete = function(req, res, next) {
       res.json(removed);
     }
   });
+};
+
+exports.me = function(req, res) {
+  res.json(req.user.toJson());
 };
